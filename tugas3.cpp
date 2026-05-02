@@ -2,32 +2,27 @@
 
 using namespace std;
 
-
 struct Node {
     int data;
     Node* next;
-    Node* prev; 
 };
 
 
 void tambahNode(Node** head, int nilai) {
     Node* newNode = new Node();
     newNode->data = nilai;
-    newNode->next = NULL;
-    newNode->prev = NULL; 
 
     if (*head == NULL) {
         *head = newNode;
+        newNode->next = *head; 
     } else {
         Node* temp = *head;
         
-        while (temp->next != NULL) {
+        while (temp->next != *head) {
             temp = temp->next;
         }
-        
         temp->next = newNode;
-        
-        newNode->prev = temp;
+        newNode->next = *head; 
     }
 }
 
@@ -42,24 +37,26 @@ void hitungTotal(Node* head) {
     int total = 0;
     int urutan = 1;
 
-    cout << "--- Daftar Data ---" << endl;
-    while (temp != NULL) {
+    cout << "--- Traversal List Sirkular ---" << endl;
+    
+    
+    do {
         cout << "Data ke " << urutan << ": " << temp->data << endl;
         
         total += temp->data; 
         
         temp = temp->next;
         urutan++;
-    }
+    } while (temp != head); 
 
-    cout << "-------------------" << endl;
+    cout << "-------------------------------" << endl;
     cout << "Total nilai adalah : " << total << endl;
 }
 
 int main() {
     Node* head = NULL;
 
-    
+   
     tambahNode(&head, 10);
     tambahNode(&head, 20);
     tambahNode(&head, 30);

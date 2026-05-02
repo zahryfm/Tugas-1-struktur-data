@@ -2,49 +2,51 @@
 
 using namespace std;
 
-
 struct Node {
     int data;
     Node* next;
-    Node* prev; 
 };
 
 
 void tambahNode(Node** head, int nilai) {
     Node* newNode = new Node();
     newNode->data = nilai;
-    newNode->next = NULL;
-    newNode->prev = NULL;
 
     if (*head == NULL) {
         *head = newNode;
+        newNode->next = *head; 
     } else {
         Node* temp = *head;
-        while (temp->next != NULL) {
+        
+        while (temp->next != *head) {
             temp = temp->next;
         }
         temp->next = newNode;
-        newNode->prev = temp; 
+        newNode->next = *head; 
     }
 }
 
 
-void traversalLengkap(Node* head) {
+void traversalDanHitung(Node* head) {
+    if (head == NULL) {
+        cout << "List kosong." << endl;
+        return;
+    }
+
     Node* temp = head;
-    Node* last = NULL;
+    int counter = 0;
+    int urutan = 1;
 
-    cout << "Traversal Maju:" << endl;
-    while (temp != NULL) {
-        cout << "Data: " << temp->data << endl;
-        last = temp; 
+   
+    do {
+        cout << "Data ke " << urutan << ": " << temp->data << endl;
         temp = temp->next;
-    }
+        counter++;
+        urutan++;
+    } while (temp != head); 
 
-    cout << "\nTraversal Mundur (Bukti Doubly Linked):" << endl;
-    while (last != NULL) {
-        cout << "Data: " << last->data << endl;
-        last = last->prev;
-    }
+    cout << "Jumlah data: " << counter << endl;
+    cout << "Koneksi terakhir: " << temp->data << " kembali ke " << temp->next->data << " (Head)" << endl;
 }
 
 int main() {
@@ -54,7 +56,7 @@ int main() {
     tambahNode(&head, 20);
     tambahNode(&head, 30);
 
-    traversalLengkap(head);
+    traversalDanHitung(head);
 
     return 0;
 }

@@ -5,60 +5,64 @@ using namespace std;
 struct Node {
     int data;
     Node* next;
-    Node* prev;
 };
 
 
 void insertDepan(Node** head, int newData) {
     Node* newNode = new Node();
     newNode->data = newData;
-    
-    
-    newNode->next = *head;
-    newNode->prev = NULL; 
 
-    
-    if (*head != NULL) {
-        (*head)->prev = newNode;
+    if (*head == NULL) {
+        *head = newNode;
+        newNode->next = *head;
+    } else {
+        Node* temp = *head;
+        
+        while (temp->next != *head) {
+            temp = temp->next;
+        }
+        
+        newNode->next = *head;
+        temp->next = newNode; 
+        *head = newNode;      
     }
-
-  
-    *head = newNode;
 }
 
 
 void insertBelakang(Node** head, int newData) {
     Node* newNode = new Node();
     newNode->data = newData;
-    newNode->next = NULL;
 
     if (*head == NULL) {
-        newNode->prev = NULL;
         *head = newNode;
+        newNode->next = *head;
         return;
     }
 
     Node* temp = *head;
-    while (temp->next != NULL) {
+    
+    while (temp->next != *head) {
         temp = temp->next;
     }
-
     
     temp->next = newNode;
-    
-    newNode->prev = temp;
+    newNode->next = *head; 
 }
 
 
-void tampilkanList(Node* node) {
-    Node* last = NULL;
-    cout << "Traversal Maju: ";
-    while (node != NULL) {
-        cout << node->data << " <-> ";
-        last = node; 
-        node = node->next;
+void tampilkanList(Node* head) {
+    if (head == NULL) {
+        cout << "List Kosong" << endl;
+        return;
     }
-    cout << "NULL" << endl;
+
+    Node* temp = head;
+    do {
+        cout << temp->data << " -> ";
+        temp = temp->next;
+    } while (temp != head);
+    
+    cout << "(kembali ke " << head->data << ")" << endl;
 }
 
 int main() {
@@ -78,7 +82,7 @@ int main() {
     cin >> dataBaru;
     insertDepan(&head, dataBaru);
 
-    cout << "\nData setelah ditambah di awal:" << endl;
+    cout << "\nData setelah ditambah di awal (Sirkular):" << endl;
     tampilkanList(head);
 
     return 0;

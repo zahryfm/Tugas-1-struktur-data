@@ -2,7 +2,6 @@
 
 using namespace std;
 
-
 struct Node {
     int data;
     Node* next;
@@ -10,58 +9,55 @@ struct Node {
 };
 
 
-void insertAkhir(Node** head, int newData) {
-    
+void insertBelakang(Node** head, int newData) {
     Node* newNode = new Node();
     newNode->data = newData;
-    newNode->next = NULL; 
 
-   
     if (*head == NULL) {
-        newNode->prev = NULL; 
         *head = newNode;
-        return;
-    }
+        newNode->next = *head;
+        newNode->prev = *head;
+    } else {
+        Node* last = (*head)->prev; 
 
-    Node* temp = *head;
-    while (temp->next != NULL) {
-        temp = temp->next;
+        newNode->next = *head;      
+        newNode->prev = last;       
+        
+        last->next = newNode;       
+        (*head)->prev = newNode;    
     }
-
-   
-    temp->next = newNode;  
-    newNode->prev = temp;  
 }
 
 
-void tampilkanList(Node* node) {
-    cout << "Isi List: ";
-    while (node != NULL) {
-        cout << node->data;
-        if (node->next != NULL) cout << " <-> ";
-        node = node->next;
-    }
-    cout << " -> NULL" << endl;
+void tampilkanList(Node* head) {
+    if (head == NULL) return;
+
+    Node* temp = head;
+    cout << "Maju: ";
+    do {
+        cout << temp->data << " <-> ";
+        temp = temp->next;
+    } while (temp != head);
+    cout << "(kembali ke " << head->data << ")" << endl;
+
+    Node* last = head->prev;
+    cout << "Mundur: ";
+    temp = last;
+    do {
+        cout << temp->data << " <-> ";
+        temp = temp->prev;
+    } while (temp != last);
+    cout << "(kembali ke " << last->data << ")" << endl;
 }
 
 int main() {
     Node* head = NULL;
-    int jumlah, nilai, dataTambahan;
+    
+    insertBelakang(&head, 10);
+    insertBelakang(&head, 20);
+    insertBelakang(&head, 30);
 
-    cout << "Masukkan jumlah data awal: ";
-    cin >> jumlah;
-
-    for (int i = 1; i <= jumlah; i++) {
-        cout << "Masukkan data ke " << i << ": ";
-        cin >> nilai;
-        insertAkhir(&head, nilai);
-    }
-
-    cout << "\nMasukkan data tambahan untuk di akhir: ";
-    cin >> dataTambahan;
-    insertAkhir(&head, dataTambahan);
-
-    cout << "\nData setelah diperbarui:" << endl;
+    cout << "Data Double Circular Linked List:" << endl;
     tampilkanList(head);
 
     return 0;
